@@ -193,6 +193,16 @@ class Core: NSObject, UIGestureRecognizerDelegate {
                 self.state = to
                 self.updateLayout(to: to)
 
+                // This handles the inset during programmatic moves like `proxy.move(to:)`.
+                let currentPosition = self.layoutAdapter.position(for: to)
+                if let contentVC = self.ownerVC?.contentViewController {
+                    if let newInsets = self.ownerVC?.delegate?.floatingPanel?(self.ownerVC!, contentSafeAreaInsetsFor: currentPosition) {
+                        if contentVC.additionalSafeAreaInsets != newInsets {
+                            contentVC.additionalSafeAreaInsets = newInsets
+                        }
+                    }
+                }
+
                 if shouldDoubleLayout {
                     os_log(msg, log: sysLog, type: .info, "Lay out the surface again to modify an intrinsic size error according to UIStackView")
                     self.updateLayout(to: to)
