@@ -109,6 +109,18 @@ import os.log
     optional
     func floatingPanel(_ fpc: FloatingPanelController, contentOffsetForPinning trackingScrollView: UIScrollView) -> CGPoint
 
+    /// Asks the delegate for custom safe area insets for the content view controller during an interactive drag.
+    ///
+    /// This method is called on every frame of a drag gesture. Use it to implement real-time parallax
+    /// or other effects where the content's padding needs to change in sync with the panel's position.
+    ///
+    /// - Parameters:
+    ///   - fpc: The floating panel controller that is being dragged.
+    ///   - position: The current y-position of the panel's surface view.
+    /// - Returns: The UIEdgeInsets to apply as `additionalSafeAreaInsets` to the `contentViewController`.
+    @objc(floatingPanel:contentSafeAreaInsetsFor:)
+    optional func floatingPanel(_ fpc: FloatingPanelController, contentSafeAreaInsetsFor position: CGFloat) -> UIEdgeInsets
+
     /// Returns a Boolean value that determines whether the tracking scroll view should
     /// scroll or not
     ///

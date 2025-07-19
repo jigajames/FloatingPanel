@@ -697,6 +697,19 @@ class Core: NSObject, UIGestureRecognizerDelegate {
 
         let cur = value(of: layoutAdapter.surfaceLocation)
 
+        if let vc = ownerVC, let contentVC = vc.contentViewController {
+            // Ask the delegate for the dynamic inset for the current position
+            if let newInsets = vc.delegate?.floatingPanel?(vc, contentSafeAreaInsetsFor: cur) {
+                // Apply the new insets if they have changed
+                if contentVC.additionalSafeAreaInsets != newInsets {
+                    contentVC.additionalSafeAreaInsets = newInsets
+                    // Force the layout to update synchronously to prevent jitter
+                    contentVC.view.setNeedsLayout()
+                    contentVC.view.layoutIfNeeded()
+                }
+            }
+        }
+
         backdropView.alpha = getBackdropAlpha(at: cur, with: value(of: translation))
 
         guard (pre != cur) else { return }
