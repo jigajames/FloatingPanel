@@ -703,9 +703,6 @@ class Core: NSObject, UIGestureRecognizerDelegate {
                 // Apply the new insets if they have changed
                 if contentVC.additionalSafeAreaInsets != newInsets {
                     contentVC.additionalSafeAreaInsets = newInsets
-                    // Force the layout to update synchronously to prevent jitter
-                    contentVC.view.setNeedsLayout()
-                    contentVC.view.layoutIfNeeded()
                 }
             }
         }
