@@ -957,6 +957,15 @@ class Core: NSObject, UIGestureRecognizerDelegate {
                 let translation = data.value - initialData.value
                 self.backdropView.alpha = self.getBackdropAlpha(at: current, with: translation)
 
+                // This handles the inset during the attraction animation (the "snap").
+                if let contentVC = ownerVC.contentViewController {
+                    if let newInsets = ownerVC.delegate?.floatingPanel?(ownerVC, contentSafeAreaInsetsFor: current) {
+                        if contentVC.additionalSafeAreaInsets != newInsets {
+                            contentVC.additionalSafeAreaInsets = newInsets
+                        }
+                    }
+                }
+
                 // Pin the offset of the tracking scroll view while moving by this animator
                 if let scrollView = self.scrollView, let initialScrollOffset = self.initialScrollOffset {
                     self.stopScrolling(at: initialScrollOffset)
